@@ -24,6 +24,7 @@ module.exports = {
                         user_type:results.user_type,
                         user_email:results.user_email,
                         user_name:results.user_name,
+                        student_id:results.student_id
                     },
                     status:200
                 });

@@ -1,4 +1,4 @@
-const { creates, gets, getsById, updates, deletesById } = require("./booking.services");
+const { creates, gets, getsById, updates, deletesById, updateBookingStatus} = require("./booking.services");
 const { genSaltSync, hashSync} = require("bcrypt");
 const { get } = require("express/lib/response");
 var nodemailer = require('nodemailer');
@@ -56,6 +56,22 @@ module.exports = {
         const body = req.body;
         const id = req.params.id;
         updates(body, id, (err, results) => {
+            if(err){
+                return res.status(500).json({
+                    success:0,
+                    message:err
+                });
+            }else{
+                return res.status(200).json({
+                    sucsess:1,
+                    message:results
+                });
+            }
+        });
+     },
+     updateBookingStatus:(req,res) => {
+        const body = req.body       
+        updateBookingStatus(body,(err, results) => {
             if(err){
                 return res.status(500).json({
                     success:0,

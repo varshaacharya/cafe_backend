@@ -46,7 +46,8 @@ module.exports  = {
                                     token:token,
                                     user_type:queryData[0].user_type,
                                     user_email:queryData[0].user_email,
-                                    user_name:queryData[0].user_name
+                                    user_name:queryData[0].user_name,
+                                    student_id:queryData[0].id
                                 };
                                 return callBack(null,message); 
                                                              

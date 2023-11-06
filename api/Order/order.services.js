@@ -111,7 +111,7 @@ module.exports  = {
             }
          );
      },
-     getStudent:(barcode_number,callBack) => {
+    getStudent:(barcode_number,callBack) => {
         pool.query(
            `SELECT booking.barcode_number, student.student_name,student.student_address,student.student_contact FROM booking INNER JOIN student ON booking.student_id = student.id where barcode_number=?`,
            [barcode_number],
@@ -128,13 +128,29 @@ module.exports  = {
            }
         );
     },
-    getStudentDetail:(id,barcode_number,callBack) => {
+    getBookings:(callBack)=>{
+        pool.query('SELECT * FROM booking',
+            (err,res)=>{
+                if(err){
+                    return callBack(err);
+                }else if(res == ""){
+                    err = "Data Not Found";
+                    return callBack(err);
+                }else{
+                    return callBack(null, res);
+                }
+            }
+        );
+    },
+    getStudentDetail:(barcode_number,callBack) => {
+        var stuData = "";
+        var barCodeItems = "";
         pool.query(
-            `SELECT temp.id, temp.token_number, temp.quantity, item.item_name 
-            FROM temp 
-            INNER JOIN item ON temp.item_id = item.id 
-            WHERE temp.token_number = ? AND temp.id = ?`,
-                       [barcode_number,id],
+            `SELECT booking.barcode_number, booking.booking_status, student.student_name, student.student_address,student_contact 
+            FROM booking 
+            INNER JOIN student ON booking.student_id = student.id 
+            WHERE booking.barcode_number = ?`,
+            [barcode_number],
            (err,results) => {
                if(err){
                    return callBack(err);
@@ -142,7 +158,33 @@ module.exports  = {
                    err = "Data Not Found";
                    return callBack(err);
                }else{
-                   return callBack(null, results);
+                   stuData = results;
+                   pool.query(                   
+                        `SELECT temp.id as id,temp.token_number, temp.quantity, product.price, product.pname 
+                        FROM temp 
+                        INNER JOIN product ON temp.item_id = product.id 
+                        WHERE temp.token_number = ?`,
+                        [barcode_number],
+                        (err,res)=>{
+                            if(err){
+                                return callBack(err);
+                            }else if(res == ""){
+                                err = "Data Not Found";
+                                return callBack(err);
+                            }else{
+                                barCodeItems = res;
+                                var data  = {
+                                    stuData,barCodeItems
+                                }
+                                return callBack(null, data);
+                            }
+
+                            
+                        }
+                   );
+
+
+                  
                }
 
            }

@@ -1,4 +1,4 @@
-const { creates, gets, getsById, updates, deletesById,getStudent ,getStudentDetail} = require("./order.services");
+const { creates, gets, getsById, updates, deletesById,getStudent ,getStudentDetail,getBookings} = require("./order.services");
 const { genSaltSync, hashSync} = require("bcrypt");
 const { get } = require("express/lib/response");
 var nodemailer = require('nodemailer');
@@ -68,10 +68,25 @@ module.exports = {
             }
         });
      },
+     getBookings:(req,res) => {   
+        getBookings((err, results) => {
+            if(err){
+                return res.status(500).json({
+                    success:0,
+                    data:err
+                });
+            }else{
+                return res.status(200).json({
+                    sucsess:1,
+                    data:results
+                });
+            }
+        });
+     },
      getStudDet:(req,res) => {  
-        const id=req.params.id; 
-        const barcode_number=req.params.barcode_number;    
-        getStudentDetail(id,barcode_number,(err, results) => {
+       
+        const barcode_number=req.body.barcode_number;    
+        getStudentDetail(barcode_number,(err, results) => {
             if(err){
                 return res.status(500).json({
                     success:0,

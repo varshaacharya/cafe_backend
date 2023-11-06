@@ -11,11 +11,11 @@ module.exports  = {
                 var date=new Date();
                 if(results == ""){
                     pool.query(
-                        `INSERT INTO item(category_id,item_name,item_image,item_date,item_status,item_price,item_description) VALUES (?,?,?,?,?,?,?)`,
+                        `INSERT INTO item(category_id,item_name,image,item_date,item_status,item_price,item_description) VALUES (?,?,?,?,?,?,?)`,
                          [
                             data.category_id,
                             data.item_name,
-                            data.item_image,
+                            data.image,
                             date,
                             data.item_status,
                             data.item_price,
@@ -61,7 +61,9 @@ module.exports  = {
      //getting the products data
      getProducts:(callBack) => {
          pool.query(
-            `select * from item`,
+            `SELECT item.id,category.category_name as catname, item.item_name as name, item.price, item.item_description as p_desc, item.image as img,  item.item_date, item.item_status
+            FROM item
+            INNER JOIN category ON item.category_id = category.id`,
             (err,results) => {
                 if(err){
                     return callBack(err);
