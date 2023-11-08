@@ -23,3 +23,8 @@ router.use("/api/order",orderRouter);
 
 
 module.exports=router;
+
+//image
+//empid(update service)
+//update employee table
+//payment

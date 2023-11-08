@@ -160,9 +160,9 @@ module.exports  = {
                }else{
                    stuData = results;
                    pool.query(                   
-                        `SELECT temp.id as id,temp.token_number, temp.quantity, product.price, product.pname 
+                        `SELECT temp.id as id,temp.token_number, temp.quantity, item.price, item.item_name 
                         FROM temp 
-                        INNER JOIN product ON temp.item_id = product.id 
+                        INNER JOIN item ON temp.item_id = item.id 
                         WHERE temp.token_number = ?`,
                         [barcode_number],
                         (err,res)=>{

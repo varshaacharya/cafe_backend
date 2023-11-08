@@ -8,20 +8,11 @@ const bcrypt = require("bcrypt");
 module.exports  = {
    
     fetchuser:(data,callBack) => {
-        pool.query(
-            `SELECT  * FROM login_master WHERE user_email = ?`,
-            [data.user_email],
-            (error, results, fields) => {
-                if(error){
-                    return callBack(error); 
-                }else if(results == ""){
-                    err = "EmailId is not registered";
-                    return callBack(err);
-                }else{
+     
                    
                      
         pool.query(
-            `select user_name,user_email,user_password,user_type from login_master where user_email = ?`,         
+            `select id,user_name,user_email,user_password,user_type from login_master where user_email = ?`,         
             [
                 data.user_email,               
             ],     
@@ -47,7 +38,7 @@ module.exports  = {
                                     user_type:queryData[0].user_type,
                                     user_email:queryData[0].user_email,
                                     user_name:queryData[0].user_name,
-                                    student_id:queryData[0].id
+                                    id:queryData[0].id,
                                 };
                                 return callBack(null,message); 
                                                              
@@ -58,9 +49,7 @@ module.exports  = {
                 }      
             );
         
-    }
-}
-);
+
 
 },  
    
